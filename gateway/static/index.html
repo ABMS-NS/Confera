@@ -1,0 +1,14 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Confera | Eventos acadêmicos</title><link rel="stylesheet" href="/static/style.css"></head>
+<body><header><div class="wrap"><p class="eyebrow">FRAMEWORK DE EVENTOS ACADÊMICOS</p><h1>Confera</h1><p>Gerencie eventos, participantes e inscrições em um só lugar.</p></div></header>
+<main class="wrap">
+<section class="panel"><h2>Cadastrar evento</h2><form id="event-form" class="form-grid">
+<label>Nome<input name="name" required></label><label>Data<input name="date" type="date" required></label><label>Local<input name="location" required></label>
+<label>Aplicação<select name="application"><option value="secomp">SECOMP</option><option value="symposium">Simpósio</option></select></label>
+<label class="wide">Descrição<textarea name="description"></textarea></label><button type="submit">Salvar evento</button></form><p id="event-message" class="message"></p></section>
+<section class="panel"><h2>Eventos cadastrados</h2><div id="events" class="list"></div></section>
+<section class="panel"><h2>Cadastrar participante</h2><form id="participant-form" class="form-grid"><label>Nome<input name="name" required></label><label>E-mail<input name="email" type="email" required></label><button type="submit">Salvar participante</button></form><p id="participant-message" class="message"></p></section>
+<section class="panel"><h2>Participantes</h2><div id="participants" class="list"></div></section>
+<section class="panel"><h2>Nova inscrição</h2><form id="registration-form" class="form-grid"><label>Evento<select name="event_id" id="event-select" required></select></label><label>Participante<select name="participant_id" id="participant-select" required></select></label><button type="submit">Realizar inscrição</button></form><p id="registration-message" class="message"></p></section>
+<section class="panel"><h2>Inscrições</h2><div id="registrations" class="list"></div></section></main>
+<footer class="wrap">Confera — demonstração acadêmica de reúso de software.</footer><script src="/static/app.js"></script></body></html>
