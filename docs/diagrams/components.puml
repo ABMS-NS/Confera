@@ -1,0 +1,12 @@
+@startuml
+title Confera - Interfaces e componentes
+interface EventInterface { +create(data) }
+interface ParticipantInterface { +validate(data) }
+interface RegistrationInterface { +validate(data) }
+class EventComponent
+class ParticipantComponent
+class RegistrationComponent
+EventComponent ..|> EventInterface
+ParticipantComponent ..|> ParticipantInterface
+RegistrationComponent ..|> RegistrationInterface
+@enduml
