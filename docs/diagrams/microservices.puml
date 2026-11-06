@@ -1,0 +1,22 @@
+@startuml
+title Confera - Arquitetura de Microservices
+actor Usuário
+component "Interface Web" as UI
+component "API Gateway\n:8000" as GW
+component "Event Service\n:8001" as ES
+component "Participant Service\n:8002" as PS
+component "Registration Service\n:8003" as RS
+database "events.db" as EDB
+database "participants.db" as PDB
+database "registrations.db" as RDB
+Usuário --> UI
+UI --> GW
+GW --> ES
+GW --> PS
+GW --> RS
+ES --> EDB
+PS --> PDB
+RS --> RDB
+RS ..> ES : consulta evento
+RS ..> PS : consulta participante
+@enduml
