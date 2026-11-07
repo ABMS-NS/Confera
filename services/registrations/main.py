@@ -1,3 +1,8 @@
+"""Registration Service (porta 8003): inscrição de participantes em eventos.
+
+Reusa o COMPONENTE RegistrationComponent (validação dos IDs) e CONSULTA os
+outros dois serviços via HTTP antes de gravar. Banco próprio: registrations.db.
+"""
 import sqlite3
 from pathlib import Path
 import httpx
@@ -34,7 +39,11 @@ def health():
 
 @app.post("/registrations", status_code=201)
 async def create_registration(payload: RegistrationInput):
-    data = component.validate(payload.model_dump())
+    try:
+        data = component.validate(payload.model_dump())
+    except ValueError as exc:  # antes isto virava HTTP 500
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    # Consulta os serviços dono dos dados: o evento e o participante existem?
     async with httpx.AsyncClient(timeout=5) as client:
         try:
             event = await client.get(f"{EVENTS_URL}/events/{data['event_id']}")
@@ -48,6 +57,11 @@ async def create_registration(payload: RegistrationInput):
     if event.is_error or participant.is_error:
         raise HTTPException(status_code=503,detail="Falha ao consultar os serviços relacionados.")
     with connect() as db:
+        duplicate = db.execute(
+            "SELECT 1 FROM registrations WHERE event_id=? AND participant_id=? AND status='active'",
+            (data["event_id"], data["participant_id"])).fetchone()
+        if duplicate:
+            raise HTTPException(status_code=409, detail="Participante já inscrito neste evento.")
         cursor = db.execute("INSERT INTO registrations(event_id,participant_id,status) VALUES(?,?,'active')",
             (data["event_id"],data["participant_id"]))
         registration_id = cursor.lastrowid

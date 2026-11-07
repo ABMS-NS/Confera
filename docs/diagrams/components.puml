@@ -1,12 +1,40 @@
 @startuml
-title Confera - Interfaces e componentes
-interface EventInterface { +create(data) }
-interface ParticipantInterface { +validate(data) }
-interface RegistrationInterface { +validate(data) }
-class EventComponent
-class ParticipantComponent
-class RegistrationComponent
+title Confera - Interfaces e Componentes de Software
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+interface EventInterface {
+  + create(data) : dict
+}
+class EventComponent <<component>> {
+  + create(data) : dict
+}
+class Event <<dataclass>> {
+  + name : str
+  + description : str
+  + date : str
+  + location : str
+  + category : str
+  + to_dict() : dict
+}
+interface ParticipantInterface {
+  + validate(data) : dict
+}
+class ParticipantComponent <<component>> {
+  + validate(data) : dict
+}
+interface RegistrationInterface {
+  + validate(data) : dict
+}
+class RegistrationComponent <<component>> {
+  + validate(data) : dict
+}
+
 EventComponent ..|> EventInterface
+EventComponent ..> Event
 ParticipantComponent ..|> ParticipantInterface
 RegistrationComponent ..|> RegistrationInterface
+
+note bottom of ParticipantComponent : nome obrigatório\ne e-mail válido
+note bottom of RegistrationComponent : event_id e participant_id\ninteiros positivos
 @enduml

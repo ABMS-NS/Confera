@@ -1,3 +1,8 @@
+"""Participant Service (porta 8002): CRUD de participantes.
+
+Reusa o COMPONENTE ParticipantComponent (validação de nome e e-mail).
+Banco próprio: participants.db (SQLite). O e-mail é único (HTTP 409 se repetir).
+"""
 import sqlite3
 from pathlib import Path
 from fastapi import FastAPI, HTTPException

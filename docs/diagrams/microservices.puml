@@ -1,19 +1,23 @@
 @startuml
 title Confera - Arquitetura de Microservices
+skinparam shadowing false
 actor Usuário
-component "Interface Web" as UI
+component "Interface Web\n(HTML/CSS/JS)" as UI
 component "API Gateway\n:8000" as GW
-component "Event Service\n:8001" as ES
-component "Participant Service\n:8002" as PS
-component "Registration Service\n:8003" as RS
+component "Event Service\n:8001\n(usa o FRAMEWORK)" as ES
+component "Participant Service\n:8002\n(usa ParticipantComponent)" as PS
+component "Registration Service\n:8003\n(usa RegistrationComponent)" as RS
 database "events.db" as EDB
 database "participants.db" as PDB
 database "registrations.db" as RDB
 Usuário --> UI
 UI --> GW
-GW --> ES
-GW --> PS
-GW --> RS
+GW --> ES : /events
+GW --> PS : /participants
+GW --> RS : /registrations
+GW ..> ES : GET /health
+GW ..> PS : GET /health
+GW ..> RS : GET /health
 ES --> EDB
 PS --> PDB
 RS --> RDB

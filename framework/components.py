@@ -1,8 +1,11 @@
+"""Componentes reutilizáveis: implementam as interfaces do framework."""
 from typing import Any
 from .interfaces import EventInterface, ParticipantInterface, RegistrationInterface
 from .models import Event
 
 class EventComponent(EventInterface):
+    """Monta o objeto Event a partir dos dados recebidos (remove espaços extras)."""
+
     def create(self, data: dict[str, Any]) -> dict[str, Any]:
         event = Event(
             name=data["name"].strip(),
@@ -14,6 +17,8 @@ class EventComponent(EventInterface):
         return event.to_dict()
 
 class ParticipantComponent(ParticipantInterface):
+    """Regra de participante: nome obrigatório e e-mail em formato válido."""
+
     def validate(self, data: dict[str, Any]) -> dict[str, Any]:
         name, email = str(data.get("name", "")).strip(), str(data.get("email", "")).strip()
         if not name:
@@ -23,6 +28,8 @@ class ParticipantComponent(ParticipantInterface):
         return {"name": name, "email": email}
 
 class RegistrationComponent(RegistrationInterface):
+    """Regra de inscrição: os dois IDs devem ser inteiros positivos."""
+
     def validate(self, data: dict[str, Any]) -> dict[str, Any]:
         try:
             event_id, participant_id = int(data["event_id"]), int(data["participant_id"])

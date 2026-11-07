@@ -1,28 +1,44 @@
 @startuml
-title Confera - Framework e Template Method
-interface EventInterface
-interface ParticipantInterface
-interface RegistrationInterface
-class EventComponent
-class ParticipantComponent
-class RegistrationComponent
-EventComponent ..|> EventInterface
-ParticipantComponent ..|> ParticipantInterface
-RegistrationComponent ..|> RegistrationInterface
+title Confera - Framework, Template Method e Aplicações
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
 abstract class EventFramework {
-  +create_event(data): dict
-  +validate(data): None
-  {abstract} +configure(data): dict
+  - event_component : EventInterface
+  + create_event(data) : dict   <<TEMPLATE METHOD>>
+  + validate(data) : None   <<FROZEN SPOT>>
+  # {abstract} configure(data) : dict   <<HOTSPOT 1>>
+  # check_rules(data) : None   <<HOTSPOT 2 (hook)>>
 }
-class Secomp
-class Symposium
-EventFramework o-- EventComponent
+class Secomp {
+  # configure(data) : dict
+}
+class Symposium {
+  # configure(data) : dict
+  # check_rules(data) : None
+}
+interface EventInterface {
+  + create(data) : dict
+}
+class EventComponent <<component>> {
+  + create(data) : dict
+}
+class Event <<dataclass>> {
+  + name, description, date
+  + location, category
+  + to_dict() : dict
+}
+
 Secomp --|> EventFramework
 Symposium --|> EventFramework
+EventFramework o-- EventInterface : usa
+EventComponent ..|> EventInterface
+EventComponent ..> Event : cria
+
 note right of EventFramework::create_event
-  Template Method:
-  1. validate (frozen spot)
-  2. configure (hotspot)
-  3. EventComponent.create
+  1. validate(data)            -> frozen spot
+  2. configure(data)           -> hotspot 1 (obrigatório)
+  3. check_rules(data)         -> hotspot 2 (opcional)
+  4. event_component.create()  -> componente reutilizável
 end note
 @enduml
