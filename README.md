@@ -37,6 +37,25 @@ uvicorn gateway.main:app --port 8000 --reload
 ```
 Acesse http://127.0.0.1:8000. Testes: `python -m unittest discover -s tests -v`.
 
+## Demonstrações de reúso (`demonstracoes/`)
+
+Duas aplicações independentes, **cada uma com uma página HTML**, que reutilizam
+o mesmo `EventFramework`: **Workshop** (Oficina, com inscrições de participantes)
+e **Hackathon** (Maratona de Programação, somente eventos). Cada uma implementa
+apenas os dois hotspots; validação, ordem dos passos e construção do evento vêm
+do framework. O backend é compartilhado, mas cada aplicação tem página, CSS e
+JavaScript próprios — com identidades visuais distintas. Cada uma persiste em
+seu próprio arquivo SQLite (`workshop.db` e `hackathon.db`).
+
+```bash
+python demonstracoes/run_all.py
+```
+
+- Workshop: http://127.0.0.1:8101
+- Hackathon: http://127.0.0.1:8102
+
+Veja [`demonstracoes/README.md`](demonstracoes/README.md) para detalhes.
+
 ## Como o reúso funciona (resumo)
 
 `EventFramework.create_event()` é o **Template Method**: valida → `configure()` → `check_rules()` → cria o evento.
